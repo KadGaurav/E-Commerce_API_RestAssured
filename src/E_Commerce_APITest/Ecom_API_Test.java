@@ -21,8 +21,10 @@ public class Ecom_API_Test {
 		
 		RequestSpecification reqLogin = given().spec(reqSpec).body(loginRequest);
 		
-		reqLogin.when().post("/api/ecom/auth/login")
-		.then().extract().response().as(LoginResponse.class);
+		LoginResponse loginresponse = reqLogin.when().post("/api/ecom/auth/login").then().extract().response().as(LoginResponse.class);
+		String token = loginresponse.getToken();
+		
+		System.out.print(token);
 		
 
 	}
