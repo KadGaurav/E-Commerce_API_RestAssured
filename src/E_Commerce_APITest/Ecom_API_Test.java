@@ -1,6 +1,7 @@
 package E_Commerce_APITest;
 
 import Pojo.LoginRequest;
+import Pojo.LoginResponse;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
@@ -20,7 +21,8 @@ public class Ecom_API_Test {
 		
 		RequestSpecification reqLogin = given().spec(reqSpec).body(loginRequest);
 		
-		reqLogin.when().post("/api/ecom/auth/login");
+		reqLogin.when().post("/api/ecom/auth/login")
+		.then().extract().response().as(LoginResponse.class);
 		
 
 	}
