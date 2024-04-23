@@ -21,7 +21,7 @@ public class Ecom_API_Test {
 	public static void main(String[] args) {
 		
 		// 1] Login 
-		System.out.println("\n Logging in to Ecom Website ---> ");
+		System.out.println("\n Logging in to Ecomerce Website ---> ");
 		RequestSpecification reqSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").setContentType(ContentType.JSON).build();
 		
 		//Call Pojo Class Object
@@ -84,7 +84,21 @@ public class Ecom_API_Test {
 		System.out.println(Response);
 		
 		
+		//4] View/Get Order Product Details
+		System.out.println("\n Viewing New Order ---> ");
+		RequestSpecification viewNewOrder =  new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addQueryParam("id", productId).addHeader("Authorization", token).setContentType(ContentType.JSON).build();
 		
+		String viewProd = given().spec(viewNewOrder).when().get("/api/ecom/order/get-orders-details").then().extract().response().asString();
+
+		System.out.print(viewProd);
+		
+		//5] Delete Product
+		System.out.println("\n Deleting New Product ---> ");
+		RequestSpecification deleteOrder =  new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addQueryParam("id", productId).addHeader("Authorization", token).setContentType(ContentType.JSON).build();
+		String deleteResponse = given().spec(deleteOrder).pathParam("productId", productId).when().delete("/api/ecom/product/delete-product/{productId}").then().extract().response().asString();
+		JsonPath js2 = new JsonPath(deleteResponse);
+		String deletedMsg = js2.get("message");
+		System.out.println(deletedMsg);
 	}
 
 }
