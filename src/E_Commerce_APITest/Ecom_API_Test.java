@@ -16,8 +16,10 @@ public class Ecom_API_Test {
 	public static void main(String[] args) {
 		RequestSpecification reqSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").setContentType(ContentType.JSON).build();
 		
+		// 1] Login 
+		System.out.println("\n Logging in to Ecom Website ---> ");
+
 		//Call Pojo Class Object
-		
 		LoginRequest loginRequest = new LoginRequest();
 		loginRequest.setUserEmail("123456gk@gmail.com");
 		loginRequest.setUserPassword("1234@Abcd");
@@ -29,14 +31,14 @@ public class Ecom_API_Test {
 		String userID = loginresponse.getUserId();
 		
 		System.out.println("Authorization Token => " + token);
-		System.out.println("User ID  => " + userID);
+		System.out.println("User ID  => " + userID);	
 		
-		String NewProductImgPath ="F:\\Selenium\\E-Commerce_APITest_RestAssured\\laptop.jpg";
 		
-		//Create Product 
+		//2] Create Product 
+		System.out.println("\n Creating New Product ---> ");
 		RequestSpecification createProductBaseSpec = new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Authorization", token).build();
 		
-		//send body as Form Data 
+		//send body as Form Data (not as raw data) 
 		RequestSpecification createProductAddSpec=
 		given().spec(createProductBaseSpec)
 		.param("productName","Laptop")
@@ -46,19 +48,24 @@ public class Ecom_API_Test {
 		.param("productPrice", "12000")
 		.param("productDescription","Laptop")
 		.param("productFor", "men")
-		.multiPart("productImage", new File(NewProductImgPath));
+		.multiPart("productImage", new File(System.getProperty("user.dir")+"\\laptop.jpg"));
+
 		
 		//user MultiPart to send Files
-		
 		 String newProductResponse = createProductAddSpec.when().post("/api/ecom/product/add-product")
 		.then().extract().response().asString();
 		 
 		 JsonPath js = new JsonPath(newProductResponse);
 		
 		String productId = js.get("productId");
-		String message = js.get("messgae");
+		String message = js.get("message");
 		System.out.println("New Product Id => "+ productId);
 		System.out.println("Message => "+ message);
+		
+		//3] Create Order of newly Created Product
+		System.out.println("\n Creating New Order ---> ");
+		
+		
 		
 		
 	}
